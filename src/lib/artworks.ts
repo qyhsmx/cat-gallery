@@ -1,4 +1,4 @@
-import { Artwork } from '../types';
+import { Artwork, MediaItem } from '../types';
 
 export const artworks: Artwork[] = [
   {
@@ -6,7 +6,7 @@ export const artworks: Artwork[] = [
     title: 'Starry Night',
     artist: 'Vincent van Gogh',
     description: 'A famous oil on canvas painting by the Dutch post-impressionist painter Vincent van Gogh.',
-    images: ['/images/微信图片_20240414145458.jpg', '/images/微信图片_20240414145432.jpg','/images/微信图片_20240414145452.jpg'],
+    media: [ {type: 'image', url: '/images/微信图片_20240414145458.jpg'},  {type: 'image', url: '/images/微信图片_20240414145432.jpg'}],
   },
   // Add more artwork entries...
 ];
