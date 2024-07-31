@@ -1,9 +1,10 @@
 import { CatInfo } from "@/types/catInfo";
 import { sql } from "@vercel/postgres";
+import { randomUUID } from "crypto";
 
 export const catInfos: CatInfo[] = [
     {
-        id: '1',
+        id: randomUUID(),
         name: '小粉',
         price: 1500,
         age: 15,
@@ -15,17 +16,16 @@ export const catInfos: CatInfo[] = [
 
 export async function queryAllCats(): Promise<CatInfo[]> {
     try {
-        const catInfos = await sql<CatInfo>`
-          SELECT
-            cat_info.id,
-            cat_info.name,
-            cat_info.price,
-            cat_info.age,
-            cat_info.category,
-            cat_info.description
-          FROM cat_info
-        `;
-        return catInfos.rows;
+        const { rows } = await sql<CatInfo[]>`
+        SELECT c.*, json_agg(json_build_object('type', m.type, 'url', m.url)) as medias
+        FROM cat_info c
+        LEFT JOIN media_items m ON c.id = m.cat_id
+        GROUP BY c.id
+      `;
+        if (rows.length === 0) {
+            return catInfos;
+        }
+        return rows[0];
     } catch (error) {
         console.error('Database Error:', error);
         return catInfos
@@ -34,17 +34,17 @@ export async function queryAllCats(): Promise<CatInfo[]> {
 
 export async function queryCatInfoById(id: string): Promise<CatInfo | undefined> {
     try {
-        const catInfo = await sql<CatInfo>`
-          SELECT
-            cat_info.id,
-            cat_info.name,
-            cat_info.price,
-            cat_info.age,
-            cat_info.category,
-            cat_info.description
-          FROM cat_info where id = ${id}
-        `;
-        return catInfo.rows[0];
+        const { rows } = await sql<CatInfo>`
+        SELECT c.*, json_agg(json_build_object('type', m.type, 'url', m.url)) as medias
+        FROM cat_info c
+        LEFT JOIN media_items m ON c.id = m.cat_id
+        WHERE c.id = ${id}
+        GROUP BY c.id
+      `;
+        if (rows.length === 0) {
+            return catInfos.find(c => c.id === id);
+        }
+        return rows[0];
     } catch (error) {
         console.error('Database Error:', error);
         return catInfos.find(c => c.id === id);

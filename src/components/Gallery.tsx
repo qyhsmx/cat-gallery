@@ -8,7 +8,7 @@ interface GalleryProps {
 }
 
 const Gallery: React.FC<GalleryProps> = ({ catInfos }) => {
-
+   
   const getFirstImage = (media: MediaItem[]): string => {
     const firstImage = media.find(item => item.type === 'image');
     return firstImage ? firstImage.url : '/placeholder-image.jpg'; // 使用占位图，以防没有图片
