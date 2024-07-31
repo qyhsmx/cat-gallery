@@ -4,7 +4,7 @@ import { randomUUID } from "crypto";
 
 export const catInfos: CatInfo[] = [
     {
-        id: randomUUID(),
+        id: 'c25c0d55-0f2a-46bd-834d-dace767980c7',
         name: '小粉',
         price: 1500,
         age: 15,
