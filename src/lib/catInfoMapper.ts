@@ -33,5 +33,20 @@ export async function queryAllCats(): Promise<CatInfo[]> {
 }
 
 export async function queryCatInfoById(id: string): Promise<CatInfo | undefined> {
-    return catInfos.find(c => c.id === id);
+    try {
+        const catInfo = await sql<CatInfo>`
+          SELECT
+            cat_info.id,
+            cat_info.name,
+            cat_info.price,
+            cat_info.age,
+            cat_info.category,
+            cat_info.description
+          FROM cat_info where id = ${id}
+        `;
+        return catInfo.rows[0];
+    } catch (error) {
+        console.error('Database Error:', error);
+        return catInfos.find(c => c.id === id);
+    }
 }
