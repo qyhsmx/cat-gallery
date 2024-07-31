@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect } from 'react';
 import Image from 'next/image';
-import { MediaItem } from '../types';
+import { MediaItem } from '@/types/catInfo';
 
 interface ImageViewerProps {
   media: MediaItem[];

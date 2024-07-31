@@ -1,12 +1,12 @@
-import { getAllArtworks } from '@/lib/artworks';
 import Gallery from '@/components/Gallery';
+import { queryAllCats } from '@/lib/catInfoMapper';
 
 export default async function Home() {
-  const artworks = await getAllArtworks();
+  const catInfos = await queryAllCats();
 
   return (
     <div>
-      <Gallery artworks={artworks} />
+      <Gallery catInfos={catInfos} />
     </div>
   );
 }

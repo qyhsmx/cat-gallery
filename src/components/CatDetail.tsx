@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Artwork, MediaItem } from '../types';
 import ImageViewer from './ImageViewer';
+import { CatInfo, MediaItem } from '@/types/catInfo';
 
-interface ArtworkDetailProps {
-  artwork: Artwork;
+interface CatDetailProps {
+  catInfo: CatInfo;
 }
 
-const ArtworkDetail: React.FC<ArtworkDetailProps> = ({ artwork }) => {
+const CatDetail: React.FC<CatDetailProps> = ({ catInfo }) => {
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
 
@@ -28,7 +28,7 @@ const ArtworkDetail: React.FC<ArtworkDetailProps> = ({ artwork }) => {
         <Image
           key={index}
           src={item.url}
-          alt={`${artwork.title} - ${index + 1}`}
+          alt={`${catInfo.name} - ${index + 1}`}
           width={80}
           height={80}
           style={{ objectFit: 'cover' }}
@@ -36,7 +36,8 @@ const ArtworkDetail: React.FC<ArtworkDetailProps> = ({ artwork }) => {
           onClick={() => openViewer(index)}
         />
       );
-    } else {
+    } 
+    else {
       return (
         <div
           key={index}
@@ -56,10 +57,10 @@ const ArtworkDetail: React.FC<ArtworkDetailProps> = ({ artwork }) => {
     <div className="flex flex-col md:flex-row gap-8">
       <div className="w-full md:w-1/2">
         <div className="relative h-96">
-          {artwork.media[currentMediaIndex].type === 'image' ? (
+          {catInfo.medias[currentMediaIndex].type === 'image' ? (
             <Image
-              src={artwork.media[currentMediaIndex].url}
-              alt={artwork.title}
+              src={catInfo.medias[currentMediaIndex].url}
+              alt={catInfo.name}
               fill
               style={{ objectFit: 'cover' }}
               className="rounded-lg cursor-pointer"
@@ -67,24 +68,24 @@ const ArtworkDetail: React.FC<ArtworkDetailProps> = ({ artwork }) => {
             />
           ) : (
             <video
-              src={artwork.media[currentMediaIndex].url}
+              src={catInfo.medias[currentMediaIndex].url}
               className="w-full h-full object-cover rounded-lg cursor-pointer"
               onClick={() => openViewer(currentMediaIndex)}
             />
           )}
         </div>
         <div className="mt-4 flex space-x-2 overflow-x-auto">
-          {artwork.media.map((item, index) => renderMediaItem(item, index))}
+          {catInfo.medias.map((item, index) => renderMediaItem(item, index))}
         </div>
       </div>
       <div className="w-full md:w-1/2">
-        <h1 className="text-3xl font-bold">{artwork.title}</h1>
-        <h2 className="text-xl text-gray-600 mt-2">{artwork.artist}</h2>
-        <p className="mt-4 text-gray-800">{artwork.description}</p>
+        <h1 className="text-3xl font-bold mb-6">名字： {catInfo.name}</h1>
+        <h2 className="text-xl text-gray-600 mt-2 mb-6">价格： {catInfo.price}</h2>
+        <p className="mt-4 text-gray-800">{catInfo.description}</p>
       </div>
       {isViewerOpen && (
         <ImageViewer
-          media={artwork.media}
+          media={catInfo.medias}
           currentIndex={currentMediaIndex}
           onClose={closeViewer}
           onChangeMedia={setCurrentMediaIndex}
@@ -94,4 +95,4 @@ const ArtworkDetail: React.FC<ArtworkDetailProps> = ({ artwork }) => {
   );
 };
 
-export default ArtworkDetail;
+export default CatDetail;
